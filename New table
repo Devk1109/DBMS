@@ -1,0 +1,93 @@
+-- Patient Table
+CREATE TABLE Patient (
+    PatientId INT PRIMARY KEY,
+    PhoneNo VARCHAR(15),
+    Name VARCHAR(100) NOT NULL,
+    Address VARCHAR(255),
+    Gender VARCHAR(10) NOT NULL
+);
+
+-- Doctor Table
+CREATE TABLE Doctor (
+    Doctor_ID INT PRIMARY KEY,
+    PhoneNo VARCHAR(15),
+    Gender VARCHAR(10) NOT NULL,
+    Name VARCHAR(100) NOT NULL,
+    Address VARCHAR(255) NOT NULL
+);
+
+-- Appointments Table
+CREATE TABLE Appointments (
+    AppointmentId INT PRIMARY KEY,
+    Dates DATE NOT NULL,
+    Start_time date,
+    End_time date,
+    Status VARCHAR(50) NOT NULL
+);
+
+-- Medical History Table
+CREATE TABLE MedicalHistory (
+    HistoryId INT PRIMARY KEY,
+    Dates  DATE NOT NULL,
+    Time_recorded date NOT NULL,
+    Condition VARCHAR(255) NOT NULL,
+    Surgeries varchar(255),
+    Medication varchar(255)
+);
+
+-- Diagnose Table
+CREATE TABLE Diagnose (
+    AppointmentId INT,
+    Doctors INT,
+    Diagnosis varchar(255),
+    Prescription varchar(255),
+    PRIMARY KEY (AppointmentId, Doctors),
+    FOREIGN KEY (AppointmentId) REFERENCES Appointments(AppointmentId),
+    FOREIGN KEY (Doctors) REFERENCES Doctor(Doctor_ID)
+);
+
+-- Patients Attend Appointments Table
+CREATE TABLE PatientsAttendAppointments (
+    PatientId INT,
+    AppointmentId INT,
+    Concerns varchar(255) NOT NULL,
+    Symptoms varchar(255) NOT NULL,
+    PRIMARY KEY (PatientId, AppointmentId),
+    FOREIGN KEY (PatientId) REFERENCES Patient(PatientId),
+    FOREIGN KEY (AppointmentId) REFERENCES Appointments(AppointmentId)
+);
+
+-- Patients Full History Table
+CREATE TABLE PatientsFullHistory (
+    PatientId INT,
+    HistoryId INT,
+    PRIMARY KEY (PatientId, HistoryId),
+    FOREIGN KEY (PatientId) REFERENCES Patient(PatientId),
+    FOREIGN KEY (HistoryId) REFERENCES MedicalHistory(HistoryId)
+);
+
+-- Doctor View History Table
+CREATE TABLE DoctorViewHistory (
+    HistoryId INT,
+    DoctorId INT,
+    PRIMARY KEY (HistoryId, DoctorId),
+    FOREIGN KEY (HistoryId) REFERENCES MedicalHistory(HistoryId),
+    FOREIGN KEY (DoctorId) REFERENCES Doctor(Doctor_ID)
+);
+
+-- Schedules Table
+CREATE TABLE Schedules (
+    ScheduleId INT PRIMARY KEY,
+    Start_Time date,
+    End_Time date,
+    Day VARCHAR(15)
+);
+
+-- Doctors Have Schedules Table
+CREATE TABLE DoctorsHaveSchedules (
+    ScheduleId INT,
+    DoctorId INT,
+    PRIMARY KEY (ScheduleId, DoctorId),
+    FOREIGN KEY (ScheduleId) REFERENCES Schedules(ScheduleId),
+    FOREIGN KEY (DoctorId) REFERENCES Doctor(Doctor_ID)
+);
