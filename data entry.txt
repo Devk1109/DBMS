@@ -95,6 +95,15 @@
 
 
 
+
+                                    ****NEW ENTRIES****
+                                    ****NEW ENTRIES****
+                                    ****NEW ENTRIES****
+
+
+
+
+
 INSERT INTO Patients (PatientId, PhoneNo, Name, Address, Gender) VALUES (1, '9876543210', 'Alice Johnson', '123 Maple Street, New York, NY', 'F');
 
 INSERT INTO Patients (PatientId, PhoneNo, Name, Address, Gender) VALUES (2, '9123456789', 'Michael Smith', '456 Elm Street, Los Angeles, CA', 'M');
