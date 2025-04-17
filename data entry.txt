@@ -1,0 +1,94 @@
+    INSERT INTO Appointments VALUES (1000, DATE '2025-09-21', '12:45:00', '11:30:00', 'Scheduled');
+    INSERT INTO Appointments VALUES (1001, DATE '2024-06-02', '15:30:00', '10:30:00', 'Completed');
+    INSERT INTO Appointments VALUES (1002, DATE '2025-09-18', '12:30:00', '13:45:00', 'Scheduled');
+    INSERT INTO Appointments VALUES (1003, DATE '2024-07-22', '15:00:00', '16:45:00', 'Completed');
+    INSERT INTO Appointments VALUES (1004, DATE '2025-02-08', '17:15:00', '10:45:00', 'Scheduled');
+    INSERT INTO Appointments VALUES (1005, DATE '2024-11-04', '13:30:00', '17:45:00', 'Scheduled');
+    INSERT INTO Appointments VALUES (1006, DATE '2024-11-11', '12:45:00', '15:15:00', 'Scheduled');
+    INSERT INTO Appointments VALUES (1007, DATE '2024-06-08', '16:00:00', '12:30:00', 'Scheduled');
+    INSERT INTO Appointments VALUES (1008, DATE '2025-10-29', '13:00:00', '16:15:00', 'Scheduled');
+    INSERT INTO Appointments VALUES (1009, DATE '2025-05-26', '08:15:00', '16:00:00', 'Completed');
+
+    -- Medical History
+    INSERT INTO Medical_History VALUES (500, DATE '2025-06-12', '10:45:00', 'Hypertension', 'Appendectomy', 'Paracetamol');
+    INSERT INTO Medical_History VALUES (501, DATE '2024-05-29', '13:30:00', 'Diabetes', 'Gallbladder Removal', 'Metformin');
+    INSERT INTO Medical_History VALUES (502, DATE '2024-07-04', '09:30:00', 'Asthma', 'Knee Surgery', 'Ibuprofen');
+    INSERT INTO Medical_History VALUES (503, DATE '2025-04-26', '17:00:00', 'Flu', 'Heart Bypass', 'Amoxicillin');
+    INSERT INTO Medical_History VALUES (504, DATE '2024-02-12', '12:00:00', 'COVID-19', 'Tonsillectomy', 'Amlodipine');
+    INSERT INTO Medical_History VALUES (505, DATE '2025-07-11', '17:30:00', 'Arthritis', '', 'Omeprazole');
+    INSERT INTO Medical_History VALUES (506, DATE '2025-10-27', '13:15:00', 'Migraine', '', 'Sertraline');
+    INSERT INTO Medical_History VALUES (507, DATE '2025-09-02', '17:00:00', 'Anxiety', '', 'Albuterol');
+    INSERT INTO Medical_History VALUES (508, DATE '2024-01-12', '13:30:00', 'Back Pain', '', 'Insulin');
+    INSERT INTO Medical_History VALUES (509, DATE '2025-02-07', '12:15:00', 'Allergy', '', 'Cetirizine');
+
+    -- Diagnose
+    INSERT INTO Diagnose VALUES (1000, 101, 'Viral Infection', 'Rest & fluids');
+    INSERT INTO Diagnose VALUES (1001, 102, 'Type 2 Diabetes', 'Metformin');
+    INSERT INTO Diagnose VALUES (1002, 103, 'Asthma Attack', 'Inhaler');
+    INSERT INTO Diagnose VALUES (1003, 104, 'Hypertension', 'Amlodipine');
+    INSERT INTO Diagnose VALUES (1004, 105, 'Migraine', 'Ibuprofen');
+    INSERT INTO Diagnose VALUES (1005, 106, 'Allergic Reaction', 'Antihistamine');
+    INSERT INTO Diagnose VALUES (1006, 107, 'Back Strain', 'Physiotherapy');
+    INSERT INTO Diagnose VALUES (1007, 108, 'Anxiety Disorder', 'Sertraline');
+    INSERT INTO Diagnose VALUES (1008, 109, 'Arthritis', 'NSAIDs');
+    INSERT INTO Diagnose VALUES (1009, 110, 'Common Cold', 'Paracetamol');
+
+    -- Patients Attend Appointments
+    INSERT INTO Patients_Attend_Appointments VALUES (1, 1000, 'Check-up for Viral Infection', 'Reported Hypertension');
+    INSERT INTO Patients_Attend_Appointments VALUES (2, 1001, 'Check-up for Type 2 Diabetes', 'Reported Diabetes');
+    INSERT INTO Patients_Attend_Appointments VALUES (3, 1002, 'Check-up for Asthma Attack', 'Reported Asthma');
+    INSERT INTO Patients_Attend_Appointments VALUES (4, 1003, 'Check-up for Hypertension', 'Reported Flu');
+    INSERT INTO Patients_Attend_Appointments VALUES (5, 1004, 'Check-up for Migraine', 'Reported COVID-19');
+    INSERT INTO Patients_Attend_Appointments VALUES (6, 1005, 'Check-up for Allergic Reaction', 'Reported Arthritis');
+    INSERT INTO Patients_Attend_Appointments VALUES (7, 1006, 'Check-up for Back Strain', 'Reported Migraine');
+    INSERT INTO Patients_Attend_Appointments VALUES (8, 1007, 'Check-up for Anxiety Disorder', 'Reported Anxiety');
+    INSERT INTO Patients_Attend_Appointments VALUES (9, 1008, 'Check-up for Arthritis', 'Reported Back Pain');
+    INSERT INTO Patients_Attend_Appointments VALUES (10, 1009, 'Check-up for Common Cold', 'Reported Allergy');
+
+    -- Patients Full History
+    INSERT INTO PatientsFullHistory VALUES (1, 500);
+    INSERT INTO PatientsFullHistory VALUES (2, 501);
+    INSERT INTO PatientsFullHistory VALUES (3, 502);
+    INSERT INTO PatientsFullHistory VALUES (4, 503);
+    INSERT INTO PatientsFullHistory VALUES (5, 504);
+    INSERT INTO PatientsFullHistory VALUES (6, 505);
+    INSERT INTO PatientsFullHistory VALUES (7, 506);
+    INSERT INTO PatientsFullHistory VALUES (8, 507);
+    INSERT INTO PatientsFullHistory VALUES (9, 508);
+    INSERT INTO PatientsFullHistory VALUES (10, 509);
+
+    -- Doctor View History
+    INSERT INTO DoctorViewHistory VALUES (500, 101);
+    INSERT INTO DoctorViewHistory VALUES (501, 102);
+    INSERT INTO DoctorViewHistory VALUES (502, 103);
+    INSERT INTO DoctorViewHistory VALUES (503, 104);
+    INSERT INTO DoctorViewHistory VALUES (504, 105);
+    INSERT INTO DoctorViewHistory VALUES (505, 106);
+    INSERT INTO DoctorViewHistory VALUES (506, 107);
+    INSERT INTO DoctorViewHistory VALUES (507, 108);
+    INSERT INTO DoctorViewHistory VALUES (508, 109);
+    INSERT INTO DoctorViewHistory VALUES (509, 110);
+
+    -- Schedules
+    INSERT INTO Schedules VALUES (300, '09:00:00', '16:00:00', 'Monday');
+    INSERT INTO Schedules VALUES (301, '08:30:00', '16:15:00', 'Tuesday');
+    INSERT INTO Schedules VALUES (302, '10:15:00', '16:45:00', 'Wednesday');
+    INSERT INTO Schedules VALUES (303, '09:15:00', '17:30:00', 'Thursday');
+    INSERT INTO Schedules VALUES (304, '10:00:00', '17:15:00', 'Friday');
+    INSERT INTO Schedules VALUES (305, '09:45:00', '17:30:00', 'Monday');
+    INSERT INTO Schedules VALUES (306, '09:30:00', '16:30:00', 'Tuesday');
+    INSERT INTO Schedules VALUES (307, '08:45:00', '15:45:00', 'Wednesday');
+    INSERT INTO Schedules VALUES (308, '10:15:00', '17:30:00', 'Thursday');
+    INSERT INTO Schedules VALUES (309, '10:00:00', '17:15:00', 'Friday');
+
+    -- Doctors Have Schedules
+    INSERT INTO DoctorsHaveSchedules VALUES (300, 101);
+    INSERT INTO DoctorsHaveSchedules VALUES (301, 102);
+    INSERT INTO DoctorsHaveSchedules VALUES (302, 103);
+    INSERT INTO DoctorsHaveSchedules VALUES (303, 104);
+    INSERT INTO DoctorsHaveSchedules VALUES (304, 105);
+    INSERT INTO DoctorsHaveSchedules VALUES (305, 106);
+    INSERT INTO DoctorsHaveSchedules VALUES (306, 107);
+    INSERT INTO DoctorsHaveSchedules VALUES (307, 108);
+    INSERT INTO DoctorsHaveSchedules VALUES (308, 109);
+    INSERT INTO DoctorsHaveSchedules VALUES (309, 110);
