@@ -1,0 +1,152 @@
+## function to add a new patient
+
+CREATE OR REPLACE FUNCTION AddPatient(
+    p_PatientId IN INT,
+    p_PhoneNo IN VARCHAR,
+    p_Name IN VARCHAR,
+    p_Address IN VARCHAR,
+    p_Gender IN VARCHAR
+) RETURN VARCHAR AS
+BEGIN
+    INSERT INTO Patient (PatientId, PhoneNo, Name, Address, Gender)
+    VALUES (p_PatientId, p_PhoneNo, p_Name, p_Address, p_Gender);
+    RETURN 'Patient added successfully';
+EXCEPTION
+    WHEN OTHERS THEN
+        RETURN 'Error: ' || SQLERRM;
+END;
+/
+
+
+## function to schedule an appointment
+
+CREATE OR REPLACE FUNCTION ScheduleAppointment(
+    p_AppointmentId IN INT,
+    p_Dates IN DATE,
+    p_StartTime IN DATE,
+    p_EndTime IN DATE,
+    p_Status IN VARCHAR
+) RETURN VARCHAR AS
+BEGIN
+    INSERT INTO Appointments (AppointmentId, Dates, Start_time, End_time, Status)
+    VALUES (p_AppointmentId, p_Dates, p_StartTime, p_EndTime, p_Status);
+    RETURN 'Appointment scheduled successfully';
+EXCEPTION
+    WHEN OTHERS THEN
+        RETURN 'Error: ' || SQLERRM;
+END;
+/
+
+
+##function to link a patient to an appointment
+
+CREATE OR REPLACE FUNCTION LinkPatientToAppointment(
+    p_PatientId IN INT,
+    p_AppointmentId IN INT,
+    p_Concerns IN VARCHAR,
+    p_Symptoms IN VARCHAR
+) RETURN VARCHAR AS
+BEGIN
+    INSERT INTO PatientsAttendAppointments (PatientId, AppointmentId, Concerns, Symptoms)
+    VALUES (p_PatientId, p_AppointmentId, p_Concerns, p_Symptoms);
+    RETURN 'Patient linked to appointment successfully';
+EXCEPTION
+    WHEN OTHERS THEN
+        RETURN 'Error: ' || SQLERRM;
+END;
+/
+
+
+
+## Function to Retrieve a Doctor’s Schedule
+
+CREATE OR REPLACE FUNCTION GetDoctorSchedule(
+    p_DoctorId IN INT
+) RETURN SYS_REFCURSOR AS
+    schedule_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN schedule_cursor FOR
+    SELECT S.Day, S.Start_Time, S.End_Time
+    FROM DoctorsHaveSchedules DHS
+    JOIN Schedules S ON DHS.ScheduleId = S.ScheduleId
+    WHERE DHS.DoctorId = p_DoctorId;
+    RETURN schedule_cursor;
+END;
+/
+
+
+## Function to Retrieve a Patient’s Full History
+
+CREATE OR REPLACE FUNCTION ViewPatientHistory(
+    p_PatientId IN INT
+) RETURN SYS_REFCURSOR AS
+    history_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN history_cursor FOR
+    SELECT MH.Dates, MH.Time_recorded, MH.Condition, MH.Surgeries, MH.Medication
+    FROM PatientsFullHistory PFH
+    JOIN MedicalHistory MH ON PFH.HistoryId = MH.HistoryId
+    WHERE PFH.PatientId = p_PatientId;
+    RETURN history_cursor;
+END;
+/
+
+
+## Function to Assign a Schedule to a Doctor
+
+CREATE OR REPLACE FUNCTION AssignScheduleToDoctor(
+    p_ScheduleId IN INT,
+    p_DoctorId IN INT
+) RETURN VARCHAR AS
+BEGIN
+    INSERT INTO DoctorsHaveSchedules (ScheduleId, DoctorId)
+    VALUES (p_ScheduleId, p_DoctorId);
+    RETURN 'Schedule assigned to doctor successfully';
+EXCEPTION
+    WHEN OTHERS THEN
+        RETURN 'Error: ' || SQLERRM;
+END;
+/
+
+
+## Function to Record a Diagnosis
+
+CREATE OR REPLACE FUNCTION AddDiagnosis(
+    p_AppointmentId IN INT,
+    p_DoctorId IN INT,
+    p_Diagnosis IN VARCHAR,
+    p_Prescription IN VARCHAR
+) RETURN VARCHAR AS
+BEGIN
+    INSERT INTO Diagnose (AppointmentId, Doctors, Diagnosis, Prescription)
+    VALUES (p_AppointmentId, p_DoctorId, p_Diagnosis, p_Prescription);
+    RETURN 'Diagnosis recorded successfully';
+EXCEPTION
+    WHEN OTHERS THEN
+        RETURN 'Error: ' || SQLERRM;
+END;
+/
+
+
+## Function to Record a Medical History
+
+CREATE OR REPLACE FUNCTION RecordMedicalHistory(
+    p_HistoryId IN INT,
+    p_Dates IN DATE,
+    p_TimeRecorded IN DATE,
+    p_Condition IN VARCHAR,
+    p_Surgeries IN VARCHAR,
+    p_Medication IN VARCHAR
+) RETURN VARCHAR AS
+BEGIN
+    INSERT INTO MedicalHistory (HistoryId, Dates, Time_recorded, Condition, Surgeries, Medication)
+    VALUES (p_HistoryId, p_Dates, p_TimeRecorded, p_Condition, p_Surgeries, p_Medication);
+    RETURN 'Medical history recorded successfully';
+EXCEPTION
+    WHEN OTHERS THEN
+        RETURN 'Error: ' || SQLERRM;
+END;
+/
+
+
+## 
