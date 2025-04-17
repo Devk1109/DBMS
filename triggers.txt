@@ -1,0 +1,120 @@
+--Trigger: Log new appointment insertions:
+
+CREATE OR REPLACE TRIGGER trg_log_new_appointment
+AFTER INSERT ON Appointments
+FOR EACH ROW
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('New appointment created: ID = ' || :NEW.AppointmentId || 
+                         ', Date = ' || TO_CHAR(:NEW.Date, 'YYYY-MM-DD') || 
+                         ', Status = ' || :NEW.Status);
+END;
+/
+
+--2. Trigger: Prevent past appointments from being inserted
+
+CREATE OR REPLACE TRIGGER trg_no_past_appointments
+BEFORE INSERT ON Appointments
+FOR EACH ROW
+BEGIN
+    IF :NEW.Date < SYSDATE THEN
+        RAISE_APPLICATION_ERROR(-20001, 'Cannot insert appointment with a past date.');
+    END IF;
+END;
+/
+-- 3. Trigger: Auto-update appointment status to 'Completed' if time is passed
+
+CREATE OR REPLACE TRIGGER trg_auto_complete_appointment
+BEFORE UPDATE ON Appointments
+FOR EACH ROW
+BEGIN
+    IF :NEW.End_time < TO_CHAR(SYSDATE, 'HH24:MI:SS') AND :OLD.Status = 'Scheduled' THEN
+        :NEW.Status := 'Completed';
+    END IF;
+END;
+/
+
+--4. Trigger: Sync PatientsFullHistory on new Medical History
+CREATE OR REPLACE TRIGGER trg_sync_patient_history
+AFTER INSERT ON Medical_History
+FOR EACH ROW
+DECLARE
+    v_patient_id NUMBER;
+BEGIN
+    -- Assume PatientId is derived by some logic or fixed mapping
+    SELECT PatientId INTO v_patient_id FROM Patients WHERE ROWNUM = 1; -- example logic
+    INSERT INTO PatientsFullHistory(PatientId, HistoryId)
+    VALUES (v_patient_id, :NEW.HistoryId);
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE('No patient found to associate with new medical history.');
+END;
+/
+
+--5. Trigger: Validate medication is not NULL if condition is critical
+
+CREATE OR REPLACE TRIGGER trg_validate_medication
+BEFORE INSERT OR UPDATE ON Medical_History
+FOR EACH ROW
+BEGIN
+    IF UPPER(:NEW.Condition) IN ('CANCER', 'DIABETES', 'HYPERTENSION') AND :NEW.Medication IS NULL THEN
+        RAISE_APPLICATION_ERROR(-20002, 'Critical condition must have a medication prescribed.');
+    END IF;
+END;
+/
+
+-- 7. Trigger: Prevent Double Booking for a Doctor
+
+CREATE OR REPLACE TRIGGER trg_prevent_double_booking
+BEFORE INSERT ON Appointments
+FOR EACH ROW
+DECLARE
+    v_count NUMBER;
+BEGIN
+    SELECT COUNT(*)
+    INTO v_count
+    FROM Appointments a
+    JOIN Patients_Attend_Appointments p ON a.AppointmentId = p.AppointmentId
+    WHERE a.Date = :NEW.Date AND a.Start_time = :NEW.Start_time
+    AND p.DoctorId = (SELECT DoctorId FROM Patients_Attend_Appointments WHERE AppointmentId = :NEW.AppointmentId);
+
+    IF v_count > 0 THEN
+        RAISE_APPLICATION_ERROR(-20003, 'Doctor already has an appointment at this time.');
+    END IF;
+END;
+/
+
+--8. Trigger: Validate Schedule Consistency
+
+
+CREATE OR REPLACE TRIGGER trg_validate_schedule_times
+BEFORE INSERT OR UPDATE ON Schedules
+FOR EACH ROW
+BEGIN
+    IF TO_DATE(:NEW.StartTime, 'HH24:MI:SS') >= TO_DATE(:NEW.EndTime, 'HH24:MI:SS') THEN
+        RAISE_APPLICATION_ERROR(-20004, 'Start time must be before end time in a schedule.');
+    END IF;
+END;
+/
+
+
+--10. Trigger: Prevent Same Patient from Being Scheduled Twice on Same Day
+
+
+CREATE OR REPLACE TRIGGER trg_patient_double_schedule
+BEFORE INSERT ON Patients_Attend_Appointments
+FOR EACH ROW
+DECLARE
+    v_count NUMBER;
+BEGIN
+    SELECT COUNT(*)
+    INTO v_count
+    FROM Patients_Attend_Appointments pa
+    JOIN Appointments a ON pa.AppointmentId = a.AppointmentId
+    WHERE pa.PatientId = :NEW.PatientId
+    AND a.Date = (SELECT Date FROM Appointments WHERE AppointmentId = :NEW.AppointmentId);
+
+    IF v_count > 0 THEN
+        RAISE_APPLICATION_ERROR(-20005, 'Patient already has an appointment on this date.');
+    END IF;
+END;
+/
