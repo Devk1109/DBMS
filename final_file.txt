@@ -1,0 +1,273 @@
+set SERVEROUTPUT on;
+-- -- CREATE TABLE Patient (
+-- --     PatientId INT PRIMARY KEY,
+-- --     PhoneNo VARCHAR(15),
+-- --     Name VARCHAR(100) NOT NULL,
+-- --     Address VARCHAR(255),
+-- --     Gender VARCHAR(10) NOT NULL
+-- -- );
+
+-- CREATE TABLE Doctor (
+--     Doctor_ID INT PRIMARY KEY,
+--     PhoneNo VARCHAR(15),
+--     Gender VARCHAR(10) NOT NULL,
+--     Name VARCHAR(100) NOT NULL,
+--     Address VARCHAR(255) NOT NULL
+-- );
+
+-- CREATE TABLE Appointments (
+--     AppointmentId INT PRIMARY KEY,
+--     Dates DATE NOT NULL,
+--     Start_time date,
+--     End_time date,
+--     Status VARCHAR(50) NOT NULL
+-- );
+
+-- CREATE TABLE MedicalHistory (
+--     HistoryId INT PRIMARY KEY,
+--     Dates  DATE NOT NULL,
+--     Time_recorded date NOT NULL,
+--     Condition VARCHAR(255) NOT NULL,
+--     Surgeries varchar(255),
+--     Medication varchar(255)
+-- );
+
+-- CREATE TABLE Diagnose (
+--     AppointmentId INT,
+--     Doctors INT,
+--     Diagnosis varchar(255),
+--     Prescription varchar(255),
+--     PRIMARY KEY (AppointmentId, Doctors),
+--     FOREIGN KEY (AppointmentId) REFERENCES Appointments(AppointmentId),
+--     FOREIGN KEY (Doctors) REFERENCES Doctor(Doctor_ID)
+-- );
+
+-- CREATE TABLE PatientsAttendAppointments (
+--     PatientId INT,
+--     AppointmentId INT,
+--     Concerns varchar(255) NOT NULL,
+--     Symptoms varchar(255) NOT NULL,
+--     PRIMARY KEY (PatientId, AppointmentId),
+--     FOREIGN KEY (PatientId) REFERENCES Patient(PatientId),
+--     FOREIGN KEY (AppointmentId) REFERENCES Appointments(AppointmentId)
+-- );
+
+-- CREATE TABLE PatientsFullHistory (
+--     PatientId INT,
+--     HistoryId INT,
+--     PRIMARY KEY (PatientId, HistoryId),
+--     FOREIGN KEY (PatientId) REFERENCES Patient(PatientId),
+--     FOREIGN KEY (HistoryId) REFERENCES MedicalHistory(HistoryId)
+-- );
+
+-- CREATE TABLE DoctorViewHistory (
+--     HistoryId INT,
+--     DoctorId INT,
+--     PRIMARY KEY (HistoryId, DoctorId),
+--     FOREIGN KEY (HistoryId) REFERENCES MedicalHistory(HistoryId),
+--     FOREIGN KEY (DoctorId) REFERENCES Doctor(Doctor_ID)
+-- );
+
+-- CREATE TABLE Schedules (
+--     ScheduleId INT PRIMARY KEY,
+--     Start_Time date,
+--     End_Time date,
+--     Day VARCHAR(15)
+-- );
+
+-- CREATE TABLE DoctorsHaveSchedules (
+--     ScheduleId INT,
+--     DoctorId INT,
+--     PRIMARY KEY (ScheduleId, DoctorId),
+--     FOREIGN KEY (ScheduleId) REFERENCES Schedules(ScheduleId),
+--     FOREIGN KEY (DoctorId) REFERENCES Doctor(Doctor_ID)
+-- );
+
+-- INSERT INTO Appointments VALUES (1000, TO_DATE('2025-09-21', 'YYYY-MM-DD'), TO_DATE('2025-09-21 12:45:00', 'YYYY-MM-DD HH24:MI:SS'), TO_DATE('2025-09-21 11:30:00', 'YYYY-MM-DD HH24:MI:SS'), 'Scheduled');
+-- INSERT INTO Appointments VALUES (1001, TO_DATE('2024-06-02', 'YYYY-MM-DD'), TO_DATE('2024-06-02 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_DATE('2024-06-02 10:30:00', 'YYYY-MM-DD HH24:MI:SS'), 'Completed');
+-- INSERT INTO Appointments VALUES (1002, TO_DATE('2025-09-18', 'YYYY-MM-DD'), TO_DATE('2025-09-18 12:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_DATE('2025-09-18 13:45:00', 'YYYY-MM-DD HH24:MI:SS'), 'Scheduled');
+-- INSERT INTO Appointments VALUES (1003, TO_DATE('2024-07-22', 'YYYY-MM-DD'), TO_DATE('2024-07-22 15:00:00', 'YYYY-MM-DD HH24:MI:SS'), TO_DATE('2024-07-22 16:45:00', 'YYYY-MM-DD HH24:MI:SS'), 'Completed');
+-- INSERT INTO Appointments VALUES (1004, TO_DATE('2025-02-08', 'YYYY-MM-DD'), TO_DATE('2025-02-08 17:15:00', 'YYYY-MM-DD HH24:MI:SS'), TO_DATE('2025-02-08 10:45:00', 'YYYY-MM-DD HH24:MI:SS'), 'Scheduled');
+-- INSERT INTO Appointments VALUES (1005, TO_DATE('2024-11-04', 'YYYY-MM-DD'), TO_DATE('2024-11-04 13:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_DATE('2024-11-04 17:45:00', 'YYYY-MM-DD HH24:MI:SS'), 'Scheduled');
+-- INSERT INTO Appointments VALUES (1006, TO_DATE('2024-11-11', 'YYYY-MM-DD'), TO_DATE('2024-11-11 12:45:00', 'YYYY-MM-DD HH24:MI:SS'), TO_DATE('2024-11-11 15:15:00', 'YYYY-MM-DD HH24:MI:SS'), 'Scheduled');
+-- INSERT INTO Appointments VALUES (1007, TO_DATE('2024-06-08', 'YYYY-MM-DD'), TO_DATE('2024-06-08 16:00:00', 'YYYY-MM-DD HH24:MI:SS'), TO_DATE('2024-06-08 12:30:00', 'YYYY-MM-DD HH24:MI:SS'), 'Scheduled');
+-- INSERT INTO Appointments VALUES (1008, TO_DATE('2025-10-29', 'YYYY-MM-DD'), TO_DATE('2025-10-29 13:00:00', 'YYYY-MM-DD HH24:MI:SS'), TO_DATE('2025-10-29 16:15:00', 'YYYY-MM-DD HH24:MI:SS'), 'Scheduled');
+-- INSERT INTO Appointments VALUES (1009, TO_DATE('2025-05-26', 'YYYY-MM-DD'), TO_DATE('2025-05-26 08:15:00', 'YYYY-MM-DD HH24:MI:SS'), TO_DATE('2025-05-26 16:00:00', 'YYYY-MM-DD HH24:MI:SS'), 'Completed');
+
+-- INSERT INTO MedicalHistory VALUES (500, TO_DATE('2025-06-12', 'YYYY-MM-DD'), TO_DATE('10:45:00', 'HH24:MI:SS'), 'Hypertension', 'Appendectomy', 'Paracetamol');
+-- INSERT INTO MedicalHistory VALUES (501, TO_DATE('2024-05-29', 'YYYY-MM-DD'), TO_DATE('13:30:00', 'HH24:MI:SS'), 'Diabetes', 'Gallbladder Removal', 'Metformin');
+-- INSERT INTO MedicalHistory VALUES (502, TO_DATE('2024-07-04', 'YYYY-MM-DD'), TO_DATE('09:30:00', 'HH24:MI:SS'), 'Asthma', 'Knee Surgery', 'Ibuprofen');
+-- INSERT INTO MedicalHistory VALUES (503, TO_DATE('2025-04-26', 'YYYY-MM-DD'), TO_DATE('17:00:00', 'HH24:MI:SS'), 'Flu', 'Heart Bypass', 'Amoxicillin');
+-- INSERT INTO MedicalHistory VALUES (504, TO_DATE('2024-02-12', 'YYYY-MM-DD'), TO_DATE('12:00:00', 'HH24:MI:SS'), 'COVID-19', 'Tonsillectomy', 'Amlodipine');
+-- INSERT INTO MedicalHistory VALUES (505, TO_DATE('2025-07-11', 'YYYY-MM-DD'), TO_DATE('17:30:00', 'HH24:MI:SS'), 'Arthritis', NULL, 'Omeprazole');
+-- INSERT INTO MedicalHistory VALUES (506, TO_DATE('2025-10-27', 'YYYY-MM-DD'), TO_DATE('13:15:00', 'HH24:MI:SS'), 'Migraine', NULL, 'Sertraline');
+-- INSERT INTO MedicalHistory VALUES (507, TO_DATE('2025-09-02', 'YYYY-MM-DD'), TO_DATE('17:00:00', 'HH24:MI:SS'), 'Anxiety', NULL, 'Albuterol');
+-- INSERT INTO MedicalHistory VALUES (508, TO_DATE('2024-01-12', 'YYYY-MM-DD'), TO_DATE('13:30:00', 'HH24:MI:SS'), 'Back Pain', NULL, 'Insulin');
+-- INSERT INTO MedicalHistory VALUES (509, TO_DATE('2025-02-07', 'YYYY-MM-DD'), TO_DATE('12:15:00', 'HH24:MI:SS'), 'Allergy', NULL, 'Cetirizine');
+
+-- INSERT INTO Diagnose VALUES (1000, 101, 'Viral Infection', 'Rest & fluids');
+-- INSERT INTO Diagnose VALUES (1001, 102, 'Type 2 Diabetes', 'Metformin');
+-- INSERT INTO Diagnose VALUES (1002, 103, 'Asthma Attack', 'Inhaler');
+-- INSERT INTO Diagnose VALUES (1003, 104, 'Hypertension', 'Amlodipine');
+-- INSERT INTO Diagnose VALUES (1004, 105, 'Migraine', 'Ibuprofen');
+-- INSERT INTO Diagnose VALUES (1005, 106, 'Allergic Reaction', 'Antihistamine');
+-- INSERT INTO Diagnose VALUES (1006, 107, 'Back Strain', 'Physiotherapy');
+-- INSERT INTO Diagnose VALUES (1007, 108, 'Anxiety Disorder', 'Sertraline');
+-- INSERT INTO Diagnose VALUES (1008, 109, 'Arthritis', 'NSAIDs');
+-- INSERT INTO Diagnose VALUES (1009, 110, 'Common Cold', 'Paracetamol');
+
+-- INSERT INTO Patient (PatientId, PhoneNo, Name, Address, Gender) VALUES (1, '9876543210', 'Alice Johnson', '123 Maple Street, New York, NY', 'F');
+-- INSERT INTO Patient (PatientId, PhoneNo, Name, Address, Gender) VALUES (2, '9123456789', 'Michael Smith', '456 Elm Street, Los Angeles, CA', 'M');
+-- INSERT INTO Patient (PatientId, PhoneNo, Name, Address, Gender) VALUES (3, '9988776655', 'Priya Sharma', 'A-12 Green Park, Delhi, India', 'F');
+-- INSERT INTO Patient (PatientId, PhoneNo, Name, Address, Gender) VALUES (4, '9112233445', 'David Kim', '789 Oak Avenue, Seattle, WA', 'M');
+-- INSERT INTO Patient (PatientId, PhoneNo, Name, Address, Gender) VALUES (5, '9090909090', 'Fatima Al-Zahra', '22 King Fahd Rd, Riyadh, Saudi Arabia', 'F');
+-- INSERT INTO Patient (PatientId, PhoneNo, Name, Address, Gender) VALUES (6, '8888555577', 'John Doe', '321 Pine Blvd, Austin, TX', 'M');
+-- INSERT INTO Patient (PatientId, PhoneNo, Name, Address, Gender) VALUES (7, '9191919191', 'Maria Gonzalez', '5th Avenue, Mexico City, Mexico', 'F');
+-- INSERT INTO Patient (PatientId, PhoneNo, Name, Address, Gender) VALUES (8, '9876549876', 'Omar Hassan', 'Al-Nakheel District, Dubai, UAE', 'M');
+-- INSERT INTO Patient (PatientId, PhoneNo, Name, Address, Gender) VALUES (9, '9011223344', 'Emily Zhang', '88 Nanjing Road, Shanghai, China', 'F');
+-- INSERT INTO Patient (PatientId, PhoneNo, Name, Address, Gender) VALUES (10, '9000112233', 'Robert Brown', '42 Oxford Street, London, UK', 'M');
+
+-- INSERT INTO Doctor (Doctor_ID, PhoneNo, Gender, Name, Address) VALUES(101, '9876543210', 'F', 'Dr. Sarah Lee', '123 Cardio Lane, New York, NY');
+-- INSERT INTO Doctor (Doctor_ID, PhoneNo, Gender, Name, Address) VALUES(102, '9123456789', 'M', 'Dr. Arjun Patel', '45 Neuro Street, Mumbai, India');
+-- INSERT INTO Doctor (Doctor_ID, PhoneNo, Gender, Name, Address) VALUES(103, '9988776655', 'F', 'Dr. Lisa Brown', '10 Kids Clinic Rd, Boston, MA');
+-- INSERT INTO Doctor (Doctor_ID, PhoneNo, Gender, Name, Address) VALUES(104, '9112233445', 'M', 'Dr. Mark Taylor', '67 Bone Blvd, Chicago, IL');
+-- INSERT INTO Doctor (Doctor_ID, PhoneNo, Gender, Name, Address) VALUES(105, '9090909090', 'M', 'Dr. Ahmed Rahman', '22 Surgery Square, Riyadh, Saudi Arabia');
+-- INSERT INTO Doctor (Doctor_ID, PhoneNo, Gender, Name, Address) VALUES(106, '8888555577', 'F', 'Dr. Emily Carter', '89 Skin Ave, Los Angeles, CA');
+-- INSERT INTO Doctor (Doctor_ID, PhoneNo, Gender, Name, Address) VALUES(107, '9191919191', 'M', 'Dr. Rajiv Mehta', '110 General Med Rd, Delhi, India');
+-- INSERT INTO Doctor (Doctor_ID, PhoneNo, Gender, Name, Address) VALUES(108, '9876549876', 'F', 'Dr. Helen Kim', '5 Oncology Way, Seoul, South Korea');
+-- INSERT INTO Doctor (Doctor_ID, PhoneNo, Gender, Name, Address) VALUES(109, '9011223344', 'M', 'Dr. James Wilson', '77 ENT Lane, Houston, TX');
+-- INSERT INTO Doctor (Doctor_ID, PhoneNo, Gender, Name, Address) VALUES(110, '9000112233', 'F', 'Dr. Anna Müller', '42 Psychiatry St, Berlin, Germany');
+
+-- INSERT INTO PatientsAttendAppointments VALUES (1, 1000, 'Check-up for Viral Infection', 'Reported Hypertension');
+-- INSERT INTO PatientsAttendAppointments VALUES (2, 1001, 'Check-up for Type 2 Diabetes', 'Reported Diabetes');
+-- INSERT INTO PatientsAttendAppointments VALUES (3, 1002, 'Check-up for Asthma Attack', 'Reported Asthma');
+-- INSERT INTO PatientsAttendAppointments VALUES (4, 1003, 'Check-up for Hypertension', 'Reported Flu');
+-- INSERT INTO PatientsAttendAppointments VALUES (5, 1004, 'Check-up for Migraine', 'Reported COVID-19');
+-- INSERT INTO PatientsAttendAppointments VALUES (6, 1005, 'Check-up for Allergic Reaction', 'Reported Arthritis');
+-- INSERT INTO PatientsAttendAppointments VALUES (7, 1006, 'Check-up for Back Strain', 'Reported Migraine');
+-- INSERT INTO PatientsAttendAppointments VALUES (8, 1007, 'Check-up for Anxiety Disorder', 'Reported Anxiety');
+-- INSERT INTO PatientsAttendAppointments VALUES (9, 1008, 'Check-up for Arthritis', 'Reported Back Pain');
+-- INSERT INTO PatientsAttendAppointments VALUES (10, 1009, 'Check-up for Common Cold', 'Reported Allergy');
+    
+
+-- INSERT INTO PatientsFullHistory VALUES (1, 500);
+-- INSERT INTO PatientsFullHistory VALUES (2, 501);
+-- INSERT INTO PatientsFullHistory VALUES (3, 502);
+-- INSERT INTO PatientsFullHistory VALUES (4, 503);
+-- INSERT INTO PatientsFullHistory VALUES (5, 504);
+-- INSERT INTO PatientsFullHistory VALUES (6, 505);
+-- INSERT INTO PatientsFullHistory VALUES (7, 506);
+-- INSERT INTO PatientsFullHistory VALUES (8, 507);
+-- INSERT INTO PatientsFullHistory VALUES (9, 508);
+-- INSERT INTO PatientsFullHistory VALUES (10, 509);
+
+-- INSERT INTO DoctorViewHistory VALUES (500, 101);
+--     INSERT INTO DoctorViewHistory VALUES (501, 102);
+--     INSERT INTO DoctorViewHistory VALUES (502, 103);
+--     INSERT INTO DoctorViewHistory VALUES (503, 104);
+--     INSERT INTO DoctorViewHistory VALUES (504, 105);
+--     INSERT INTO DoctorViewHistory VALUES (505, 106);
+--     INSERT INTO DoctorViewHistory VALUES (506, 107);
+--     INSERT INTO DoctorViewHistory VALUES (507, 108);
+--     INSERT INTO DoctorViewHistory VALUES (508, 109);
+--     INSERT INTO DoctorViewHistory VALUES (509, 110);
+
+-- INSERT INTO Schedules VALUES (300, TO_DATE('2025-06-12 09:00:00', 'YYYY-MM-DD HH24:MI:SS'), TO_DATE('2025-06-12 16:00:00', 'YYYY-MM-DD HH24:MI:SS'), 'Monday');
+-- INSERT INTO Schedules VALUES (301, TO_DATE('2024-05-29 08:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_DATE('2024-05-29 16:15:00', 'YYYY-MM-DD HH24:MI:SS'), 'Tuesday');
+-- INSERT INTO Schedules VALUES (302, TO_DATE('2024-07-04 10:15:00', 'YYYY-MM-DD HH24:MI:SS'), TO_DATE('2024-07-04 16:45:00', 'YYYY-MM-DD HH24:MI:SS'), 'Wednesday');
+-- INSERT INTO Schedules VALUES (303, TO_DATE('2025-04-26 09:15:00', 'YYYY-MM-DD HH24:MI:SS'), TO_DATE('2025-04-26 17:30:00', 'YYYY-MM-DD HH24:MI:SS'), 'Thursday');
+-- INSERT INTO Schedules VALUES (304, TO_DATE('2024-02-12 10:00:00', 'YYYY-MM-DD HH24:MI:SS'), TO_DATE('2024-02-12 17:15:00', 'YYYY-MM-DD HH24:MI:SS'), 'Friday');
+-- INSERT INTO Schedules VALUES (305, TO_DATE('2025-07-11 09:45:00', 'YYYY-MM-DD HH24:MI:SS'), TO_DATE('2025-07-11 17:30:00', 'YYYY-MM-DD HH24:MI:SS'), 'Monday');
+-- INSERT INTO Schedules VALUES (306, TO_DATE('2025-10-27 09:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_DATE('2025-10-27 16:30:00', 'YYYY-MM-DD HH24:MI:SS'), 'Tuesday');
+-- INSERT INTO Schedules VALUES (307, TO_DATE('2025-09-02 08:45:00', 'YYYY-MM-DD HH24:MI:SS'), TO_DATE('2025-09-02 15:45:00', 'YYYY-MM-DD HH24:MI:SS'), 'Wednesday');
+-- INSERT INTO Schedules VALUES (308, TO_DATE('2024-01-12 10:15:00', 'YYYY-MM-DD HH24:MI:SS'), TO_DATE('2024-01-12 17:30:00', 'YYYY-MM-DD HH24:MI:SS'), 'Thursday');
+-- INSERT INTO Schedules VALUES (309, TO_DATE('2025-02-07 10:00:00', 'YYYY-MM-DD HH24:MI:SS'), TO_DATE('2025-02-07 17:15:00', 'YYYY-MM-DD HH24:MI:SS'), 'Friday');
+
+--INSERT INTO DoctorsHaveSchedules VALUES (300, 101);
+--INSERT INTO DoctorsHaveSchedules VALUES (301, 102);
+--INSERT INTO DoctorsHaveSchedules VALUES (302, 103);
+--INSERT INTO DoctorsHaveSchedules VALUES (303, 104);
+--INSERT INTO DoctorsHaveSchedules VALUES (304, 105);
+--INSERT INTO DoctorsHaveSchedules VALUES (305, 106);
+--INSERT INTO DoctorsHaveSchedules VALUES (306, 107);
+--INSERT INTO DoctorsHaveSchedules VALUES (307, 108);
+--INSERT INTO DoctorsHaveSchedules VALUES (308, 109);
+--INSERT INTO DoctorsHaveSchedules VALUES (309, 110);
+
+
+CREATE OR REPLACE PROCEDURE AssignDoctorToPatient (
+    in_DesiredDate   IN DATE,
+    in_StartTime     IN DATE,
+    in_EndTime       IN DATE,
+    out_DoctorId     OUT Doctor.Doctor_ID%TYPE
+)
+IS
+BEGIN
+    -- Find an available doctor
+    SELECT d.Doctor_ID
+    INTO out_DoctorId
+    FROM Doctor d
+    JOIN DoctorsHaveSchedules dhs ON d.Doctor_ID = dhs.DoctorId
+    JOIN Schedules s ON dhs.ScheduleId = s.ScheduleId
+    WHERE TRIM(TO_CHAR(in_DesiredDate, 'Day')) = s.Day
+      AND s.Start_Time <= in_StartTime
+      AND s.End_Time >= in_EndTime
+      AND NOT EXISTS (
+          SELECT 1
+          FROM Diagnose diag
+          JOIN Appointments app ON diag.AppointmentId = app.AppointmentId
+          WHERE diag.Doctors = d.Doctor_ID
+            AND app.Dates = in_DesiredDate
+            AND (
+                  (app.Start_Time BETWEEN in_StartTime AND in_EndTime)
+               OR (app.End_Time BETWEEN in_StartTime AND in_EndTime)
+                )
+      )
+    AND ROWNUM = 1;
+
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        out_DoctorId := NULL; -- No doctor found
+END;
+/
+
+CREATE OR REPLACE PROCEDURE BookAppointment (
+    in_PatientId   IN Patient.PatientId%TYPE,
+    in_DesiredDate IN DATE,
+    in_StartTime   IN DATE,
+    in_EndTime     IN DATE,
+    in_Concerns    IN VARCHAR2,
+    in_Symptoms    IN VARCHAR2
+)
+IS
+    selectedDoctorId Doctor.Doctor_ID%TYPE;
+    newAppointmentId Appointments.AppointmentId%TYPE;
+BEGIN
+    -- Step 1: Call helper to assign doctor
+    AssignDoctorToPatient(
+        in_DesiredDate => in_DesiredDate,
+        in_StartTime   => in_StartTime,
+        in_EndTime     => in_EndTime,
+        out_DoctorId   => selectedDoctorId
+    );
+
+    -- Step 2: Check if doctor assigned
+    IF selectedDoctorId IS NULL THEN
+        raise_application_error(-20002, 'No available doctor for the selected time slot.');
+    END IF;
+
+    -- Step 3: Insert into Appointments
+    INSERT INTO Appointments (Dates, Start_Time, End_Time, Status)
+    VALUES (in_DesiredDate, in_StartTime, in_EndTime, 'Scheduled')
+    RETURNING AppointmentId INTO newAppointmentId;
+
+    -- Step 4: Insert into PatientsAttendAppointments
+    INSERT INTO PatientsAttendAppointments (PatientId, AppointmentId, Concerns, Symptoms)
+    VALUES (in_PatientId, newAppointmentId, in_Concerns, in_Symptoms);
+
+    -- Step 5: Insert into Diagnose
+    INSERT INTO Diagnose (AppointmentId, Doctors, Diagnosis, Prescription)
+    VALUES (newAppointmentId, selectedDoctorId, NULL, NULL);
+
+END;
+/
