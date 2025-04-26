@@ -58,12 +58,12 @@ CREATE TABLE PatientsAttendAppointments (
 );
 
 -- Patients Full History Table
-CREATE TABLE PatientsFullHistory (
+CREATE TABLE Patients_Full_History (
     PatientId INT,
     HistoryId INT,
     PRIMARY KEY (PatientId, HistoryId),
     FOREIGN KEY (PatientId) REFERENCES Patient(PatientId),
-    FOREIGN KEY (HistoryId) REFERENCES MedicalHistory(HistoryId)
+    FOREIGN KEY (HistoryId) REFERENCES Medical_History(HistoryId)
 );
 
 -- Doctor View History Table
