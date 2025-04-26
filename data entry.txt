@@ -12,16 +12,17 @@ INSERT INTO Appointments VALUES (1009, DATE '2025-05-26', TIMESTAMP '2025-05-26 
 
 
     -- Medical History
-    INSERT INTO Medical_History VALUES (500, DATE '2025-06-12', '10:45:00', 'Hypertension', 'Appendectomy', 'Paracetamol');
-    INSERT INTO Medical_History VALUES (501, DATE '2024-05-29', '13:30:00', 'Diabetes', 'Gallbladder Removal', 'Metformin');
-    INSERT INTO Medical_History VALUES (502, DATE '2024-07-04', '09:30:00', 'Asthma', 'Knee Surgery', 'Ibuprofen');
-    INSERT INTO Medical_History VALUES (503, DATE '2025-04-26', '17:00:00', 'Flu', 'Heart Bypass', 'Amoxicillin');
-    INSERT INTO Medical_History VALUES (504, DATE '2024-02-12', '12:00:00', 'COVID-19', 'Tonsillectomy', 'Amlodipine');
-    INSERT INTO Medical_History VALUES (505, DATE '2025-07-11', '17:30:00', 'Arthritis', '', 'Omeprazole');
-    INSERT INTO Medical_History VALUES (506, DATE '2025-10-27', '13:15:00', 'Migraine', '', 'Sertraline');
-    INSERT INTO Medical_History VALUES (507, DATE '2025-09-02', '17:00:00', 'Anxiety', '', 'Albuterol');
-    INSERT INTO Medical_History VALUES (508, DATE '2024-01-12', '13:30:00', 'Back Pain', '', 'Insulin');
-    INSERT INTO Medical_History VALUES (509, DATE '2025-02-07', '12:15:00', 'Allergy', '', 'Cetirizine');
+INSERT INTO Medical_History VALUES (500, DATE '2025-06-12', TIMESTAMP '2025-06-12 10:45:00', 'Hypertension', 'Appendectomy', 'Paracetamol');
+INSERT INTO Medical_History VALUES (501, DATE '2024-05-29', TIMESTAMP '2024-05-29 13:30:00', 'Diabetes', 'Gallbladder Removal', 'Metformin');
+INSERT INTO Medical_History VALUES (502, DATE '2024-07-04', TIMESTAMP '2024-07-04 09:30:00', 'Asthma', 'Knee Surgery', 'Ibuprofen');
+INSERT INTO Medical_History VALUES (503, DATE '2025-04-26', TIMESTAMP '2025-04-26 17:00:00', 'Flu', 'Heart Bypass', 'Amoxicillin');
+INSERT INTO Medical_History VALUES (504, DATE '2024-02-12', TIMESTAMP '2024-02-12 12:00:00', 'COVID-19', 'Tonsillectomy', 'Amlodipine');
+INSERT INTO Medical_History VALUES (505, DATE '2025-07-11', TIMESTAMP '2025-07-11 17:30:00', 'Arthritis', 'Joint Replacement', 'Omeprazole');
+INSERT INTO Medical_History VALUES (506, DATE '2025-10-27', TIMESTAMP '2025-10-27 13:15:00', 'Migraine', 'Neuro Surgery', 'Sertraline');
+INSERT INTO Medical_History VALUES (507, DATE '2025-09-02', TIMESTAMP '2025-09-02 17:00:00', 'Anxiety', 'No Surgery', 'Albuterol');
+INSERT INTO Medical_History VALUES (508, DATE '2024-01-12', TIMESTAMP '2024-01-12 13:30:00', 'Back Pain', 'Spine Surgery', 'Insulin');
+INSERT INTO Medical_History VALUES (509, DATE '2025-02-07', TIMESTAMP '2025-02-07 12:15:00', 'Allergy', 'Sinus Surgery', 'Cetirizine');
+
 
     -- Diagnose
     INSERT INTO Diagnose VALUES (1000, 101, 'Viral Infection', 'Rest & fluids');
