@@ -26,7 +26,7 @@ CREATE TABLE Appointments (
 );
 
 -- Medical History Table
-CREATE TABLE MedicalHistory (
+CREATE TABLE Medical_History (
     HistoryId INT PRIMARY KEY,
     Dates  DATE NOT NULL,
     Time_recorded date NOT NULL,
