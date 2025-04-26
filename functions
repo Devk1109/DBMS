@@ -149,4 +149,83 @@ END;
 /
 
 
-## 
+############################################################################################################################################################################################################### 
+Date-26-04-25
+
+
+CREATE OR REPLACE PROCEDURE AssignDoctorToPatient (
+    in_DesiredDate   IN DATE,
+    in_StartTime     IN DATE,
+    in_EndTime       IN DATE,
+    out_DoctorId     OUT Doctor.Doctor_ID%TYPE
+)
+IS
+BEGIN
+    -- Find an available doctor
+    SELECT d.Doctor_ID
+    INTO out_DoctorId
+    FROM Doctor d
+    JOIN DoctorsHaveSchedules dhs ON d.Doctor_ID = dhs.DoctorId
+    JOIN Schedules s ON dhs.ScheduleId = s.ScheduleId
+    WHERE TRIM(TO_CHAR(in_DesiredDate, 'Day')) = s.Day
+      AND s.Start_Time <= in_StartTime
+      AND s.End_Time >= in_EndTime
+      AND NOT EXISTS (
+          SELECT 1
+          FROM Diagnose diag
+          JOIN Appointments app ON diag.AppointmentId = app.AppointmentId
+          WHERE diag.Doctors = d.Doctor_ID
+            AND app.Dates = in_DesiredDate
+            AND (
+                  (app.Start_Time BETWEEN in_StartTime AND in_EndTime)
+               OR (app.End_Time BETWEEN in_StartTime AND in_EndTime)
+                )
+      )
+    AND ROWNUM = 1;
+
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        out_DoctorId := NULL; -- No doctor found
+END;
+/
+
+CREATE OR REPLACE PROCEDURE BookAppointment (
+    in_PatientId   IN Patient.PatientId%TYPE,
+    in_DesiredDate IN DATE,
+    in_StartTime   IN DATE,
+    in_EndTime     IN DATE,
+    in_Concerns    IN VARCHAR2,
+    in_Symptoms    IN VARCHAR2
+)
+IS
+    selectedDoctorId Doctor.Doctor_ID%TYPE;
+    newAppointmentId Appointments.AppointmentId%TYPE;
+BEGIN
+    -- Step 1: Call helper to assign doctor
+    AssignDoctorToPatient(
+        in_DesiredDate => in_DesiredDate,
+        in_StartTime   => in_StartTime,
+        in_EndTime     => in_EndTime,
+        out_DoctorId   => selectedDoctorId
+    );
+
+    -- Step 2: Check if doctor assigned
+    IF selectedDoctorId IS NULL THEN
+        raise_application_error(-20002, 'No available doctor for the selected time slot.');
+    END IF;
+
+    -- Step 3: Insert into Appointments
+    INSERT INTO Appointments (Dates, Start_Time, End_Time, Status)
+    VALUES (in_DesiredDate, in_StartTime, in_EndTime, 'Scheduled')
+    RETURNING AppointmentId INTO newAppointmentId;
+
+    -- Step 4: Insert into PatientsAttendAppointments
+    INSERT INTO PatientsAttendAppointments (PatientId, AppointmentId, Concerns, Symptoms)
+    VALUES (in_PatientId, newAppointmentId, in_Concerns, in_Symptoms);
+
+    -- Step 5: Insert into Diagnose
+    INSERT INTO Diagnose (AppointmentId, Doctors, Diagnosis, Prescription)
+    VALUES (newAppointmentId, selectedDoctorId, NULL, NULL);
+
+END;
+/
