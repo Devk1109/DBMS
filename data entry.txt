@@ -37,16 +37,16 @@ INSERT INTO Medical_History VALUES (509, DATE '2025-02-07', TIMESTAMP '2025-02-0
     INSERT INTO Diagnose VALUES (1009, 110, 'Common Cold', 'Paracetamol');
 
     -- Patients Attend Appointments
-    INSERT INTO Patients_Attend_Appointments VALUES (1, 1000, 'Check-up for Viral Infection', 'Reported Hypertension');
-    INSERT INTO Patients_Attend_Appointments VALUES (2, 1001, 'Check-up for Type 2 Diabetes', 'Reported Diabetes');
-    INSERT INTO Patients_Attend_Appointments VALUES (3, 1002, 'Check-up for Asthma Attack', 'Reported Asthma');
-    INSERT INTO Patients_Attend_Appointments VALUES (4, 1003, 'Check-up for Hypertension', 'Reported Flu');
-    INSERT INTO Patients_Attend_Appointments VALUES (5, 1004, 'Check-up for Migraine', 'Reported COVID-19');
-    INSERT INTO Patients_Attend_Appointments VALUES (6, 1005, 'Check-up for Allergic Reaction', 'Reported Arthritis');
-    INSERT INTO Patients_Attend_Appointments VALUES (7, 1006, 'Check-up for Back Strain', 'Reported Migraine');
-    INSERT INTO Patients_Attend_Appointments VALUES (8, 1007, 'Check-up for Anxiety Disorder', 'Reported Anxiety');
-    INSERT INTO Patients_Attend_Appointments VALUES (9, 1008, 'Check-up for Arthritis', 'Reported Back Pain');
-    INSERT INTO Patients_Attend_Appointments VALUES (10, 1009, 'Check-up for Common Cold', 'Reported Allergy');
+    INSERT INTO PatientsAttendAppointments VALUES (1, 1000, 'Check-up for Viral Infection', 'Reported Hypertension');
+    INSERT INTO PatientsAttendAppointments VALUES (2, 1001, 'Check-up for Type 2 Diabetes', 'Reported Diabetes');
+    INSERT INTO PatientsAttendAppointments VALUES (3, 1002, 'Check-up for Asthma Attack', 'Reported Asthma');
+    INSERT INTO PatientsAttendAppointments VALUES (4, 1003, 'Check-up for Hypertension', 'Reported Flu');
+    INSERT INTO PatientsAttendAppointments VALUES (5, 1004, 'Check-up for Migraine', 'Reported COVID-19');
+    INSERT INTO PatientsAttendAppointments VALUES (6, 1005, 'Check-up for Allergic Reaction', 'Reported Arthritis');
+    INSERT INTO PatientsAttendAppointments VALUES (7, 1006, 'Check-up for Back Strain', 'Reported Migraine');
+    INSERT INTO PatientsAttendAppointments VALUES (8, 1007, 'Check-up for Anxiety Disorder', 'Reported Anxiety');
+    INSERT INTO PatientsAttendAppointments VALUES (9, 1008, 'Check-up for Arthritis', 'Reported Back Pain');
+    INSERT INTO PatientsAttendAppointments VALUES (10, 1009, 'Check-up for Common Cold', 'Reported Allergy');
 
     -- Patients Full History
     INSERT INTO PatientsFullHistory VALUES (1, 500);
