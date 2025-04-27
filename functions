@@ -338,3 +338,40 @@ BEGIN
     );
 END;
 /
+
+
+
+
+create or replace PROCEDURE delete_patient_info(id in number){
+is
+begin
+    if id in(select patientid from patient) then
+        delete from table diagnose where appointmentid in(select appointmentid from patientsattendappointments where patientid=id);
+        delete from table appointments where appointmentid in(select appointmentid from patientsattendappointments where patientid=id);
+        delete from table patientsattendappointments where patietid=id;
+
+        delete from table doctorviewhistory where historyid in(select historyid from patientsfullHistory where patientid=id);
+        delete from table medicalhistory where historyid in (select historyid from patientsfullHistory where patientid=id );
+        delete from table patientFullHistory where patientid=id;
+        
+        delete from table patient where patientid=id;
+        dbms_output.put_line("patient details are removed from database");
+    end if ;
+end;
+
+}
+
+create or replace PROCEDURE remove_doctor(id in number){
+is
+begin
+    if id in (select doctorid from doctor) then
+        delete from table doctorviewhistory where doctorid=id;
+        update diagnose set doctorid=NULL where doctorid=id;
+        delete from table DoctorsHaveSchedules where doctorid=id;
+        delete from table doctor where doctorid=id;
+        dbms_output.put_line("doctor has been remove from table");
+    else 
+        dbms_output.put_line("doctor is not found");
+    end if;
+end;
+}
