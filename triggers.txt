@@ -5,7 +5,7 @@ AFTER INSERT ON Appointments
 FOR EACH ROW
 BEGIN
     DBMS_OUTPUT.PUT_LINE('New appointment created: ID = ' || :NEW.AppointmentId || 
-                         ', Date = ' || TO_CHAR(:NEW.Date, 'YYYY-MM-DD') || 
+                         ', Date = ' || TO_CHAR(:NEW.Dates, 'YYYY-MM-DD') || 
                          ', Status = ' || :NEW.Status);
 END;
 /
@@ -90,7 +90,7 @@ CREATE OR REPLACE TRIGGER trg_validate_schedule_times
 BEFORE INSERT OR UPDATE ON Schedules
 FOR EACH ROW
 BEGIN
-    IF TO_DATE(:NEW.StartTime, 'HH24:MI:SS') >= TO_DATE(:NEW.EndTime, 'HH24:MI:SS') THEN
+    IF TO_DATE(:NEW.Start_Time, 'HH24:MI:SS') >= TO_DATE(:NEW.End_Time, 'HH24:MI:SS') THEN
         RAISE_APPLICATION_ERROR(-20004, 'Start time must be before end time in a schedule.');
     END IF;
 END;
