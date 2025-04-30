@@ -272,6 +272,93 @@ BEGIN
 END;
 /
 
+
+-- Enable server output to display messages
+SET SERVEROUTPUT ON;
+
+-- Create or replace the procedure
+CREATE OR REPLACE PROCEDURE remove_doctor(id IN NUMBER)
+IS
+    doctor_exists NUMBER;
+BEGIN
+    -- Check if doctor exists
+    SELECT COUNT(*) INTO doctor_exists FROM doctor WHERE doctorid = id;
+
+    IF doctor_exists > 0 THEN
+        DELETE FROM doctorviewhistory WHERE doctorid = id;
+        UPDATE diagnose SET doctorid = NULL WHERE doctorid = id;
+        DELETE FROM DoctorsHaveSchedules WHERE doctorid = id;
+        DELETE FROM doctor WHERE doctorid = id;
+
+        DBMS_OUTPUT.PUT_LINE('Doctor has been removed from the table.');
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('Doctor is not found.');
+    END IF;
+END;
+/
+
+
+DECLARE
+    id NUMBER;
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Enter the ID of the doctor you want to remove:');
+    id := &enter_id;  -- Accepts user input in SQL*Plus
+    remove_doctor(id);
+END;
+/
+
+CREATE OR REPLACE PROCEDURE delete_patient_info(id IN NUMBER)
+IS
+    patient_exists NUMBER;
+BEGIN
+    -- Check if patient exists
+    SELECT COUNT(*) INTO patient_exists FROM patient WHERE patientid = id;
+
+    IF patient_exists > 0 THEN
+        -- Delete dependent records in the correct order
+
+        DELETE FROM patientsattendappointments WHERE patientid = id;
+
+        DELETE FROM doctorviewhistory 
+        WHERE historyid IN (
+            SELECT historyid FROM patientsfullhistory WHERE patientid = id
+        );
+
+        DELETE FROM medicalhistory 
+        WHERE historyid IN (
+            SELECT historyid FROM patientsfullhistory WHERE patientid = id
+        );
+
+        DELETE FROM patientsfullhistory WHERE patientid = id;
+        DELETE FROM patient WHERE patientid = id;
+
+        DBMS_OUTPUT.PUT_LINE('Patient details have been removed from the database.');
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('Patient not found.');
+    END IF;
+END;
+/
+
+
+SET SERVEROUTPUT ON;
+
+-- Create the procedure (already done)
+-- CREATE OR REPLACE PROCEDURE delete_patient_info ...
+
+-- Run this block:
+DECLARE
+    id NUMBER;
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Enter the ID of the patient you want to remove:');
+    id := &enter_id;
+    delete_patient_info(id);
+END;
+/
+
+
+
+
+
 --1. Trigger: Log new appointment insertions:
 
 CREATE OR REPLACE TRIGGER trg_log_new_appointment
