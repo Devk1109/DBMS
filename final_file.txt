@@ -357,6 +357,114 @@ END;
 
 
 
+CREATE OR REPLACE PROCEDURE InsertOrUpdatePatientHistory (
+    -- Patient Info
+    p_PatientId IN INT,
+    p_PhoneNo IN VARCHAR2,
+    p_Name IN VARCHAR2,
+    p_Address IN VARCHAR2,
+    p_Gender IN VARCHAR2,
+
+    -- Medical History Info
+    p_HistoryId IN INT,
+    p_HistoryDate IN DATE,
+    p_TimeRecorded IN DATE,
+    p_Condition IN VARCHAR2,
+    p_Surgeries IN VARCHAR2,
+    p_Medication IN VARCHAR2
+) IS
+    v_ExistsPatient INT;
+    v_ExistsHistory INT;
+    v_ExistsPatientHistory INT;
+BEGIN
+    -- Start Transaction
+    BEGIN
+        -- Check if the patient already exists
+        SELECT COUNT(*) INTO v_ExistsPatient
+        FROM Patient
+        WHERE PatientId = p_PatientId;
+
+        IF v_ExistsPatient > 0 THEN
+            -- Update Patient record
+            UPDATE Patient
+            SET PhoneNo = p_PhoneNo,
+                Name = p_Name,
+                Address = p_Address,
+                Gender = p_Gender
+            WHERE PatientId = p_PatientId;
+        ELSE
+            -- Insert a new Patient record
+            INSERT INTO Patient (PatientId, PhoneNo, Name, Address, Gender)
+            VALUES (p_PatientId, p_PhoneNo, p_Name, p_Address, p_Gender);
+        END IF;
+
+        -- Check if the Medical History already exists
+        SELECT COUNT(*) INTO v_ExistsHistory
+        FROM MedicalHistory
+        WHERE HistoryId = p_HistoryId;
+
+        IF v_ExistsHistory > 0 THEN
+            -- Update Medical History record
+            UPDATE MedicalHistory
+            SET Dates = p_HistoryDate,
+                Time_recorded = p_TimeRecorded,
+                Condition = p_Condition,
+                Surgeries = p_Surgeries,
+                Medication = p_Medication
+            WHERE HistoryId = p_HistoryId;
+        ELSE
+            -- Insert a new Medical History record
+            INSERT INTO MedicalHistory (HistoryId, Dates, Time_recorded, Condition, Surgeries, Medication)
+            VALUES (p_HistoryId, p_HistoryDate, p_TimeRecorded, p_Condition, p_Surgeries, p_Medication);
+        END IF;
+
+        -- Check if the relationship already exists in Patients_Full_History
+        SELECT COUNT(*) INTO v_ExistsPatientHistory
+        FROM PatientsFullHistory
+        WHERE PatientId = p_PatientId AND HistoryId = p_HistoryId;
+
+        IF v_ExistsPatientHistory = 0 THEN
+            -- Insert the relationship if not exists
+            INSERT INTO PatientsFullHistory (PatientId, HistoryId)
+            VALUES (p_PatientId, p_HistoryId);
+        END IF;
+
+        -- Commit the transaction
+        COMMIT;
+    EXCEPTION
+        WHEN OTHERS THEN
+            -- Rollback in case of an error
+            ROLLBACK;
+            -- Raise the exception for further handling
+            RAISE;
+    END;
+END InsertOrUpdatePatientHistory;
+/
+
+
+--call
+BEGIN
+    InsertOrUpdatePatientHistory(
+        p_PatientId    => &Enter_Patient_ID,
+        p_PhoneNo      => '&Enter_Phone_Number',
+        p_Name         => '&Enter_Patient_Name',
+        p_Address      => '&Enter_Patient_Address',
+        p_Gender       => '&Enter_Gender',
+        p_HistoryId    => &Enter_History_ID,
+        p_HistoryDate  => TO_DATE('&Enter_History_Date', 'YYYY-MM-DD'),
+        p_TimeRecorded => TO_DATE('&Enter_Time', 'HH24:MI:SS'),  -- time-only input
+        p_Condition    => '&Enter_Condition',
+        p_Surgeries    => '&Enter_Surgeries',
+        p_Medication   => '&Enter_Medication'
+    );
+END;
+/
+
+
+
+
+
+
 
 
 --1. Trigger: Log new appointment insertions:
