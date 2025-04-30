@@ -271,3 +271,66 @@ BEGIN
 
 END;
 /
+
+--1. Trigger: Log new appointment insertions:
+
+CREATE OR REPLACE TRIGGER trg_log_new_appointment
+AFTER INSERT ON Appointments
+FOR EACH ROW
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('New appointment created: ID = ' || :NEW.AppointmentId || 
+                         ', Date = ' || TO_CHAR(:NEW.Dates, 'YYYY-MM-DD') || 
+                         ', Status = ' || :NEW.Status);
+END;
+/
+
+
+--2. Trigger: Prevent past appointments from being inserted
+
+CREATE OR REPLACE TRIGGER trg_no_past_appointments
+BEFORE INSERT ON Appointments
+FOR EACH ROW
+BEGIN
+    IF :NEW.Date < SYSDATE THEN
+        RAISE_APPLICATION_ERROR(-20001, 'Cannot insert appointment with a past date.');
+    END IF;
+END;
+/
+
+--3. Trigger: Prevent Same Patient from Being Scheduled Twice on Same Day
+
+
+CREATE OR REPLACE TRIGGER trg_patient_double_schedule
+BEFORE INSERT ON Patients_Attend_Appointments
+FOR EACH ROW
+DECLARE
+    v_count NUMBER;
+BEGIN
+    SELECT COUNT(*)
+    INTO v_count
+    FROM Patients_Attend_Appointments pa
+    JOIN Appointments a ON pa.AppointmentId = a.AppointmentId
+    WHERE pa.PatientId = :NEW.PatientId
+    AND a.Date = (SELECT Date FROM Appointments WHERE AppointmentId = :NEW.AppointmentId);
+
+    IF v_count > 0 THEN
+        RAISE_APPLICATION_ERROR(-20005, 'Patient already has an appointment on this date.');
+    END IF;
+END;
+/
+
+--4. Trigger: Validate Schedule Consistency
+
+
+CREATE OR REPLACE TRIGGER trg_validate_schedule_times
+BEFORE INSERT OR UPDATE ON Schedules
+FOR EACH ROW
+BEGIN
+    IF TO_DATE(:NEW.Start_Time, 'HH24:MI:SS') >= TO_DATE(:NEW.End_Time, 'HH24:MI:SS') THEN
+        RAISE_APPLICATION_ERROR(-20004, 'Start time must be before end time in a schedule.');
+    END IF;
+END;
+/
+
+
+
