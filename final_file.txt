@@ -286,16 +286,39 @@ END;
 
 
 --2. Trigger: Prevent past appointments from being inserted
-
+set serveroutput on;
 CREATE OR REPLACE TRIGGER trg_no_past_appointments
 BEFORE INSERT ON Appointments
 FOR EACH ROW
 BEGIN
-    IF :NEW.Date < SYSDATE THEN
+    IF :NEW.Dates < SYSDATE THEN
         RAISE_APPLICATION_ERROR(-20001, 'Cannot insert appointment with a past date.');
     END IF;
 END;
 /
+
+
+
+INSERT INTO Appointments (AppointmentId, Dates, Start_Time, End_Time, Status)
+VALUES (
+    1001,
+    TO_DATE('2025-04-01', 'YYYY-MM-DD'),
+    TO_DATE('2025-04-01 10:00', 'YYYY-MM-DD HH24:MI'),
+    TO_DATE('2025-04-01 10:30', 'YYYY-MM-DD HH24:MI'),
+    'Scheduled'
+);
+
+INSERT INTO Appointments (AppointmentId, Dates, Start_Time, End_Time, Status)
+VALUES (
+    1030,
+    TO_DATE('2025-05-10', 'YYYY-MM-DD'),
+    TO_DATE('2025-05-10 10:00', 'YYYY-MM-DD HH24:MI'),
+    TO_DATE('2025-05-10 10:30', 'YYYY-MM-DD HH24:MI'),
+    'Scheduled'
+);
+
+
+
 
 --3. Trigger: Prevent Same Patient from Being Scheduled Twice on Same Day
 
