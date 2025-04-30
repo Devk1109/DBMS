@@ -342,24 +342,38 @@ END;
 
 
 
-create or replace PROCEDURE delete_patient_info(id in number){
-is
-begin
-    if id in(select patientid from patient) then
-        delete from table diagnose where appointmentid in(select appointmentid from patientsattendappointments where patientid=id);
-        delete from table appointments where appointmentid in(select appointmentid from patientsattendappointments where patientid=id);
-        delete from table patientsattendappointments where patietid=id;
+CREATE OR REPLACE PROCEDURE delete_patient_info(id IN NUMBER)
+IS
+    patient_exists NUMBER;
+BEGIN
+    -- Check if patient exists
+    SELECT COUNT(*) INTO patient_exists FROM patient WHERE patientid = id;
 
-        delete from table doctorviewhistory where historyid in(select historyid from patientsfullHistory where patientid=id);
-        delete from table medicalhistory where historyid in (select historyid from patientsfullHistory where patientid=id );
-        delete from table patientFullHistory where patientid=id;
-        
-        delete from table patient where patientid=id;
-        dbms_output.put_line("patient details are removed from database");
-    end if ;
-end;
+    IF patient_exists > 0 THEN
+        -- Delete dependent records in the correct order
 
-}
+        DELETE FROM patientsattendappointments WHERE patientid = id;
+
+        DELETE FROM patientsfullhistory WHERE patientid = id;        
+        DELETE FROM patient WHERE patientid = id;
+
+        DBMS_OUTPUT.PUT_LINE('Patient details have been removed from the database.');
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('Patient not found.');
+    END IF;
+END;
+/
+
+
+DECLARE
+    id NUMBER;
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Enter the ID of the patient you want to remove:');
+    id := &enter_id;  -- Accepts user input in SQL*Plus
+    delete_patient_info(id);
+END;
+/
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -- Enable server output to display messages
