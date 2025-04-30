@@ -361,17 +361,38 @@ end;
 
 }
 
-create or replace PROCEDURE remove_doctor(id in number){
-is
-begin
-    if id in (select doctorid from doctor) then
-        delete from table doctorviewhistory where doctorid=id;
-        update diagnose set doctorid=NULL where doctorid=id;
-        delete from table DoctorsHaveSchedules where doctorid=id;
-        delete from table doctor where doctorid=id;
-        dbms_output.put_line("doctor has been remove from table");
-    else 
-        dbms_output.put_line("doctor is not found");
-    end if;
-end;
-}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- Enable server output to display messages
+SET SERVEROUTPUT ON;
+
+-- Create or replace the procedure
+CREATE OR REPLACE PROCEDURE remove_doctor(id IN NUMBER)
+IS
+    doctor_exists NUMBER;
+BEGIN
+    -- Check if doctor exists
+    SELECT COUNT(*) INTO doctor_exists FROM doctor WHERE doctor_id = id;
+
+    IF doctor_exists > 0 THEN
+        DELETE FROM doctorviewhistory WHERE doctorid = id;
+        delete from DIAGNOSE where doctors=id;
+        DELETE FROM DoctorsHaveSchedules WHERE doctorid = id;
+        DELETE FROM doctor WHERE doctor_id = id;
+
+        DBMS_OUTPUT.PUT_LINE('Doctor has been removed from the table.');
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('Doctor is not found.');
+    END IF;
+END;
+/
+
+
+DECLARE
+    id NUMBER;
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Enter the ID of the doctor you want to remove:');
+    id := &enter_id;  -- Accepts user input in SQL*Plus
+    remove_doctor(id);
+END;
+/
+
