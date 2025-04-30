@@ -323,24 +323,51 @@ VALUES (
 --3. Trigger: Prevent Same Patient from Being Scheduled Twice on Same Day
 
 
+set SERVEROUTPUT on;
+
 CREATE OR REPLACE TRIGGER trg_patient_double_schedule
-BEFORE INSERT ON Patients_Attend_Appointments
+BEFORE INSERT ON PatientsAttendAppointments
 FOR EACH ROW
 DECLARE
+    v_new_date DATE;
     v_count NUMBER;
 BEGIN
+    -- Get the date of the new appointment
+    SELECT Dates INTO v_new_date
+    FROM Appointments
+    WHERE AppointmentId = :NEW.AppointmentId;
+
+    -- Check if the patient already has an appointment on the same date
     SELECT COUNT(*)
     INTO v_count
-    FROM Patients_Attend_Appointments pa
+    FROM PatientsAttendAppointments pa
     JOIN Appointments a ON pa.AppointmentId = a.AppointmentId
     WHERE pa.PatientId = :NEW.PatientId
-    AND a.Date = (SELECT Date FROM Appointments WHERE AppointmentId = :NEW.AppointmentId);
+      AND a.Dates = v_new_date;
 
     IF v_count > 0 THEN
         RAISE_APPLICATION_ERROR(-20005, 'Patient already has an appointment on this date.');
     END IF;
 END;
 /
+
+-- Insert a first appointment
+-- Insert first appointment for the patient
+INSERT INTO Appointments (AppointmentId, Dates, Start_Time, End_Time, Status)
+VALUES (10001, TO_DATE('2025-05-05', 'YYYY-MM-DD'), TO_DATE('10:00', 'HH24:MI'), TO_DATE('10:30', 'HH24:MI'), 'Scheduled');
+
+INSERT INTO PatientsAttendAppointments (PatientId, AppointmentId, Concerns, Symptoms)
+VALUES (501, 10001, 'Sore Throat', 'Cough');
+
+
+-- Try to insert another for same patient and same day – should fail
+-- Insert second appointment on same day
+INSERT INTO Appointments (AppointmentId, Dates, Start_Time, End_Time, Status)
+VALUES (10002, TO_DATE('2025-05-05', 'YYYY-MM-DD'), TO_DATE('11:00', 'HH24:MI'), TO_DATE('11:30', 'HH24:MI'), 'Scheduled');
+
+INSERT INTO PatientsAttendAppointments (PatientId, AppointmentId, Concerns, Symptoms)
+VALUES (501, 10002, 'Back Pain', 'Stiffness');
+
 
 --4. Trigger: Validate Schedule Consistency
 
