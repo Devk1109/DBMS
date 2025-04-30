@@ -461,6 +461,12 @@ END;
 /
 
 
+v_PatientId   Patient.PatientId%TYPE := &Enter_Patient_ID;
+    v_Date        DATE := TO_DATE('&Enter_Appointment_Date (YYYY-MM-DD)', 'YYYY-MM-DD');
+    v_StartTime   DATE := TO_DATE('&Enter_Start_Time (HH24:MI)', 'HH24:MI');
+    v_EndTime     DATE := TO_DATE('&Enter_End_Time (HH24:MI)', 'HH24:MI');
+    v_Concerns    VARCHAR2(500) := '&Enter_Concerns';
+    v_Symptoms    VARCHAR2(500) := '&Enter_Symptoms';
 
 
 
